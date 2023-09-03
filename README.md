@@ -6,6 +6,7 @@
     <img src="https://img.shields.io/badge/-json-orange" />
     <img src="https://img.shields.io/badge/mySQL-blue"  />
 </p>
+
 ## Description
 A node.js application that uses user input from inquirer to populate an employee tracker database displaying members of a company.
 ![](./images/ex1.jpg)
