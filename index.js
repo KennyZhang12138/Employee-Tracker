@@ -3,21 +3,15 @@ const inquirer = require("inquirer");
 
 connection.connect((error) => {
   if (error) throw error;
-  console.log(
-    `====================================================================================`
-  );
-  console.log(``);
-  console.log(
-    "                              Employee Tracker                                      "
-  );
-  console.log(``);
-  console.log(
-    "                                                          Created By: Dunjiang Zhang"
-  );
-  console.log(``);
-  console.log(
-    `====================================================================================`
-  );
+  console.log(`====================================================================================`);
+  console.log(`|                                                                                  |`);
+  console.log(`|                                                                                  |`);
+  console.log("|                                Employee Tracker                                  |");
+  console.log(`|                                                                                  |`);
+  console.log(`|                                                                                  |`);
+  console.log("|                                                      Created By: Dunjiang Zhang  |");
+  console.log(`|                                                                                  |`);
+  console.log(`====================================================================================`);
   options();
 });
 
@@ -67,6 +61,7 @@ const options = () => {
         case "Remove Employee":
           removeEmployee();
         case "Exit":
+          console.log("Exiting Database.")
           connection.end();
       }
     });
