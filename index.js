@@ -236,7 +236,78 @@ const addRole = () => {
   });
 };
 
-const addEmployee = () => {};
+const addEmployee = () => {
+   inquirer
+     .prompt([
+       {
+         type: "input",
+         name: "fistName",
+         message: "What is the employee's first name?",
+       },
+       {
+         type: "input",
+         name: "lastName",
+         message: "What is the employee's last name?",
+       },
+     ])
+     .then((answer) => {
+       const crit = [answer.fistName, answer.lastName];
+       const roleSql = `SELECT role.id, role.title FROM role`;
+       connection.query(roleSql, (error, response) => {
+         if (error) throw error;
+         let roleNamesArray = [];
+         response.forEach((role) => {
+           roleNamesArray.push(role.title);
+         });
+         inquirer
+           .prompt([
+             {
+               type: "list",
+               name: "role",
+               message: "What is the employee's role?",
+               choices: roleNamesArray,
+             },
+           ])
+           .then((answer) => {
+             let roleId;
+             response.forEach((role) => {
+               if (answer.role === role.title) {
+                 roleId = role.id;
+               }
+             });
+             crit.push(roleId);
+             const managerSql = `SELECT * FROM employee`;
+             connection.query(managerSql, (error, data) => {
+               if (error) throw error;
+               const managers = data.map(({ id, first_name, last_name }) => ({
+                 name: first_name + " " + last_name,
+                 value: id,
+               }));
+               inquirer
+                 .prompt([
+                   {
+                     type: "list",
+                     name: "manager",
+                     message: "Who is the employee's manager?",
+                     choices: managers,
+                   },
+                 ])
+                 .then((managerChoice) => {
+                   const manager = managerChoice.manager;
+                   crit.push(manager);
+                   const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+                                  VALUES (?, ?, ?, ?)`;
+                   connection.query(sql, crit, (error) => {
+                     if (error) throw error;
+                     console.log("Employee has been added!");
+                     mainMenu();
+                   });
+                 });
+             });
+           });
+       });
+     });;
+};
 
 const updateEmployeeRole = () => {};
 
