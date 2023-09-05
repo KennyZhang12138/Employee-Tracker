@@ -9,7 +9,7 @@
 
 ## Description
 A node.js application that uses user input from inquirer to populate an employee tracker database displaying members of a company.
-![](./images/ex1.jpg)
+![](./images/ex1.png)
 ## Table of Contents
 
 - [Installation](#Installation)
@@ -53,11 +53,11 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 ## Example
 
-![](./images/ex1.jpg)
+![](./images/ex1.png)
 
 ## Full Walkthrough Video
-[Link](https)
-![](./images/walkthrough.gif)
+[Link](https://drive.google.com/file/d/1_K-mbx1Yh8X-hAK3_4uju7zk4Opfpcvd/view)
+![](./images/ex2.gif)
 
 ## Contributors
 

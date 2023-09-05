@@ -309,7 +309,65 @@ const addEmployee = () => {
      });;
 };
 
-const updateEmployeeRole = () => {};
+const updateEmployeeRole = () => {
+   let sql = `SELECT employee.id, employee.first_name, employee.last_name, role.id AS "role_id"
+                    FROM employee, role, department WHERE department.id = role.department_id AND role.id = employee.role_id`;
+   connection.query(sql, (error, response) => {
+     if (error) throw error;
+     let employeeNamesArray = [];
+     response.forEach((employee) => {
+       employeeNamesArray.push(`${employee.first_name} ${employee.last_name}`);
+     });
+
+     let sql = `SELECT role.id, role.title FROM role`;
+     connection.query(sql, (error, response) => {
+       if (error) throw error;
+       let rolesArray = [];
+       response.forEach((role) => {
+         rolesArray.push(role.title);
+       });
+
+       inquirer
+         .prompt([
+           {
+             name: "updateEmployee",
+             type: "list",
+             message: "Which employee has a new role?",
+             choices: employeeNamesArray,
+           },
+           {
+             name: "updateRole",
+             type: "list",
+             message: "What is their new role?",
+             choices: rolesArray,
+           },
+         ])
+         .then((answer) => {
+           let newTitleId, employeeId;
+           response.forEach((role) => {
+             if (answer.updateRole === role.title) {
+               newTitleId = role.id;
+             }
+           });
+
+           response.forEach((employee) => {
+             if (
+               answer.updateEmployee ===
+               `${employee.first_name} ${employee.last_name}`
+             ) {
+               employeeId = employee.id;
+             }
+           });
+           let sqls = `UPDATE employee SET employee.role_id = ? WHERE employee.id = ?`;
+           connection.query(sqls, [newTitleId, employeeId], (error) => {
+             if (error) throw error;
+             console.log(`Employee Role Updated`);
+             mainMenu();
+           });
+         });
+     });
+   });
+};
 
 const removeDepartment = () => {
   let sql = `SELECT department.id, department.name FROM department`;
@@ -398,7 +456,7 @@ const removeEmployee = () => {
     inquirer
       .prompt([
         {
-          name: "chosenEmployee",
+          name: "updateEmployee",
           type: "list",
           message: "Which employee would you like to remove?",
           choices: employeeArray,
@@ -409,7 +467,7 @@ const removeEmployee = () => {
 
         response.forEach((employee) => {
           if (
-            answer.chosenEmployee ===
+            answer.updateEmployee ===
             `${employee.first_name} ${employee.last_name}`
           ) {
             employeeId = employee.id;
